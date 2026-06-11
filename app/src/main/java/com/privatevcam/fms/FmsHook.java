@@ -17,10 +17,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class FmsHook implements IXposedHookLoadPackage {
 
-    // Tên gói của ứng dụng FMS Bình Thuận mục tiêu
     private static final String TARGET_PACKAGE = "com.fms.binhthuan"; 
-    
-    // Đường dẫn chứa ảnh giả lập trên điện thoại của bạn
     private static final String FAKE_IMAGE_PATH = "/sdcard/FMS_Fake/fake.jpg";
     private static final String TAG = "FMS_HOOK_PRIVATE";
 
@@ -30,9 +27,9 @@ public class FmsHook implements IXposedHookLoadPackage {
             return;
         }
 
-        XposedBridge.log("[" + TAG + "] Đã nhắm mục tiêu ứng dụng FMS Bình Thuận thành công!");
+        XposedBridge.log("[" + TAG + "] Đã liên kết thành công với ứng dụng FMS Bình Thuận!");
 
-        // HOOK CAMERA DỰA TRÊN CAMERA 1 API
+        // HOOK CAMERA 1 API
         try {
             XposedHelpers.findAndHookMethod(
                 "android.hardware.Camera", 
@@ -45,7 +42,7 @@ public class FmsHook implements IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        XposedBridge.log("[" + TAG + "] Phát hiện ứng dụng đang chụp ảnh!");
+                        XposedBridge.log("[" + TAG + "] Ứng dụng FMS đang gọi lệnh Chụp ảnh!");
                         final Camera.PictureCallback originalJpegCallback = (Camera.PictureCallback) param.args[3];
                         
                         if (originalJpegCallback != null) {
@@ -54,10 +51,10 @@ public class FmsHook implements IXposedHookLoadPackage {
                                 public void onPictureTaken(byte[] data, Camera camera) {
                                     byte[] fakeData = getFakeImageBytes();
                                     if (fakeData != null) {
-                                        XposedBridge.log("[" + TAG + "] Thay ảnh chụp thực địa bằng ảnh giả lập!");
+                                        XposedBridge.log("[" + TAG + "] Thay thế ảnh chụp camera thành công bằng ảnh giả lập!");
                                         originalJpegCallback.onPictureTaken(fakeData, camera);
                                     } else {
-                                        XposedBridge.log("[" + TAG + "] Thư mục rỗng hoặc lỗi đọc file, dùng ảnh thật!");
+                                        XposedBridge.log("[" + TAG + "] Không tìm thấy ảnh fake.jpg tại thư mục FMS_Fake, dùng ảnh từ camera thật.");
                                         originalJpegCallback.onPictureTaken(data, camera);
                                     }
                                 }
@@ -67,7 +64,7 @@ public class FmsHook implements IXposedHookLoadPackage {
                 }
             );
         } catch (Exception e) {
-            XposedBridge.log("[" + TAG + "] Không thể Hook Camera API: " + e.getMessage());
+            XposedBridge.log("[" + TAG + "] Lỗi thiết lập Hook Camera API: " + e.getMessage());
         }
 
         // HOOK BITMAP FACTORY (Bẫy nạp ảnh từ đường dẫn tạm thời)
@@ -85,21 +82,20 @@ public class FmsHook implements IXposedHookLoadPackage {
                             File fakeFile = new File(FAKE_IMAGE_PATH);
                             if (fakeFile.exists()) {
                                 param.args[0] = FAKE_IMAGE_PATH;
-                                XposedBridge.log("[" + TAG + "] Chuyển hướng luồng giải nén ảnh sang ảnh fake!");
+                                XposedBridge.log("[" + TAG + "] Chuyển đổi thành công đường dẫn nạp ảnh tạm thành file fake!");
                             }
                         }
                     }
                 }
             );
         } catch (Exception e) {
-            XposedBridge.log("[" + TAG + "] Không thể Hook BitmapFactory: " + e.getMessage());
+            XposedBridge.log("[" + TAG + "] Lỗi thiết lập Hook BitmapFactory: " + e.getMessage());
         }
     }
 
     private byte[] getFakeImageBytes() {
         File file = new File(FAKE_IMAGE_PATH);
         if (!file.exists()) {
-            Log.e(TAG, "Không tìm thấy file ảnh tại: " + FAKE_IMAGE_PATH);
             return null;
         }
         
