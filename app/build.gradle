@@ -1,8 +1,0 @@
-dependencies {
-    // Thư viện Xposed API để thực hiện hook hệ thống
-    compileOnly 'ro.obi.xposed:api:82'
-    
-    // Các thư viện mặc định của Android
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-}
