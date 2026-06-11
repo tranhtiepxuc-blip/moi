@@ -1,4 +1,3 @@
-```java
 package com.privatevcam.fms;
 
 import android.graphics.Bitmap;
