@@ -2,7 +2,7 @@ name: Build Xposed APK
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Cho phép nhấn nút kích hoạt build thủ công
+  workflow_dispatch: # Cho phép bấm chạy thủ công từ giao diện Web
 
 jobs:
   build:
@@ -17,8 +17,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Initialize Gradle Wrapper
-      run: gradle wrapper
+    # Thiết lập Gradle ổn định để build Android Gradle Plugin 8.1.1
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: 8.2.1
+
+    # Tạo lại tệp Wrapper tương thích trực tiếp trên máy chủ GitHub
+    - name: Generate Gradle Wrapper
+      run: gradle wrapper --gradle-version 8.2.1
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
