@@ -1,22 +1,18 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        // Sử dụng phiên bản AGP ổn định và khớp với Gradle 8.2.1
-        classpath 'com.android.tools.build:gradle:8.1.1'
-    }
+defaultConfig {
+    applicationId "com.privatevcam.fms"
+    minSdk 21
+    targetSdk 34
+    versionCode 1
+    versionName "1.0"
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://api.xposed.info/' }
+buildTypes {
+    release {
+        minifyEnabled false
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
 }
-
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
 }
