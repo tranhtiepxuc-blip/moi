@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="[http://schemas.android.com/apk/res/android](http://schemas.android.com/apk/res/android)"
+    package="com.privatevcam.fms">
+
+    <application
+        android:allowBackup="true"
+        android:label="Hệ Thống Hỗ Trợ FMS"
+        android:supportsRtl="true">
+
+        <!-- Khai báo cho LSPosed nhận diện đây là module -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="Công cụ tối ưu hóa hình ảnh thực địa FMS Bình Thuận" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="82" />
+
+    </application>
+</manifest>
