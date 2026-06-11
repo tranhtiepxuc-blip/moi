@@ -1,3 +1,22 @@
-plugins {
-    id 'com.android.application' version '8.1.1' apply false
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Sử dụng phiên bản AGP ổn định và khớp với Gradle 8.2.1
+        classpath 'com.android.tools.build:gradle:8.1.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://api.xposed.info/' }
+    }
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
 }
