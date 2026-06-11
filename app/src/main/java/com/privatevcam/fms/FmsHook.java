@@ -191,5 +191,3 @@ public class FmsHook implements IXposedHookLoadPackage {
         }
     }
 }
-
-```
