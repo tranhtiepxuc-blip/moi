@@ -7,7 +7,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.privatevcam.fms" // Tên gói ẩn danh của riêng bạn
+        applicationId "com.privatevcam.fms"
         minSdk 21
         targetSdk 34
         versionCode 1
@@ -27,6 +27,7 @@ android {
 }
 
 dependencies {
+    // Thư viện Xposed API để thực hiện hook ứng dụng
     compileOnly 'ro.obi.xposed:api:82'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
