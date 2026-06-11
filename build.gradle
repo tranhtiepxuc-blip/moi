@@ -1,3 +1,11 @@
+plugins {
+id 'com.android.application'
+}
+
+android {
+namespace 'com.privatevcam.fms'
+compileSdk 34
+
 defaultConfig {
     applicationId "com.privatevcam.fms"
     minSdk 21
@@ -15,4 +23,10 @@ buildTypes {
 compileOptions {
     sourceCompatibility JavaVersion.VERSION_17
     targetCompatibility JavaVersion.VERSION_17
+}
+}
+
+dependencies {
+compileOnly 'de.robv.android.xposed:api:82'
+implementation 'androidx.appcompat:appcompat:1.6.1'
 }
