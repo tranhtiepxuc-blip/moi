@@ -2,7 +2,7 @@ name: Build Xposed APK
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Cho phép bấm chạy thủ công từ giao diện Web
+  workflow_dispatch: # Cho phép bấm nút kích hoạt chạy lại thủ công
 
 jobs:
   build:
@@ -17,18 +17,23 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Thiết lập Gradle ổn định để build Android Gradle Plugin 8.1.1
+    # SỬA LỖI: Buộc xóa mọi Cache cũ của Gradle trên máy chủ GitHub
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: 8.2.1
+        cache-disabled: true 
 
-    # Tạo lại tệp Wrapper tương thích trực tiếp trên máy chủ GitHub
+    # Tạo lại tệp Wrapper tương thích trực tiếp
     - name: Generate Gradle Wrapper
       run: gradle wrapper --gradle-version 8.2.1
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    # Chạy Clean trước khi Build để xóa toàn bộ file lỗi cũ
+    - name: Clean Project
+      run: ./gradlew clean
 
     - name: Build Debug APK
       run: ./gradlew assembleDebug
